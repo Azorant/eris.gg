@@ -37,8 +37,8 @@ const projects = [
       },
     ],
     images: [
-      { src: '/rhea/one.png', height: 152 },
-      { src: '/rhea/two.png', height: 152 },
+      { src: '/rhea/one.png', height: 'h-[152px]' },
+      { src: '/rhea/two.png', height: 'h-[152px]' },
     ],
   },
   {
@@ -56,7 +56,7 @@ const projects = [
         icon: faLink,
       },
     ],
-    images: [{ src: '/icarus-tools/one.png', height: 300 }],
+    images: [{ src: '/icarus-tools/one.png', height: 'h-[300px]' }],
   },
 ];
 
@@ -104,7 +104,7 @@ export default function Home() {
               <div className="flex flex-wrap w-full gap-2">
                 {project.images.map((image, index) => (
                   <div className="relative flex-grow" key={index}>
-                    <Image src={image.src} className={`object-contain w-auto h-[${image.height}px] mx-auto`} alt="Rhea screenshot" width="0" height="0" sizes="100vw" />
+                    <Image src={image.src} className={`object-contain w-auto ${image.height} mx-auto`} alt="Rhea screenshot" width="0" height="0" sizes="100vw" />
                   </div>
                 ))}
               </div>

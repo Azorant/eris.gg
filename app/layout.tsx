@@ -8,6 +8,7 @@ config.autoAddCss = false;
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://eris.gg'),
   title: 'Derek Alsop',
   description: 'Full Stack Developer',
   themeColor: '#84d0e2',
