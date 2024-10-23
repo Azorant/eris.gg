@@ -7,11 +7,12 @@ export async function getSongInfo(): Promise<SongInfo | null> {
         Authorization: `Bearer ${process.env.YOUTUBE_TOKEN}`,
       },
     });
-    return res.json();
+    if (res.ok) return res.json();
+    return null;
   } catch (error) {
     console.error({
       message: 'Unable to contact youtube music',
-      error: (error as Error).cause ?? (error as Error).message,
+      error: (error as Error).message,
     });
     return null;
   }

@@ -119,20 +119,26 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-screen w-screen text-white flex">
-      <div className="p-6 w-full max-w-[80dvw] flex flex-col xl:flex-row mx-auto gap-4 ">
+    <div className="h-screen w-screen text-white flex overflow-x-hidden">
+      <div className="w-auto max-w-[95dvw] xl:max-w-[80dvw] flex flex-row gap-4 p-6 pb-24 xl:pb-4 flex-wrap min-h-screen h-fit place-content-center mx-auto">
         {/* Main Card */}
-        <div className="flex flex-wrap border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4 mx-auto w-full max-w-lg h-fit sm:min-h-80 sm:h-80 bg-cover" style={{ backgroundImage: `url(${main_wave.src})` }}>
+        <div className="flex flex-wrap border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4  w-full max-w-lg h-fit sm:min-h-80 sm:h-80 bg-cover" style={{ backgroundImage: `url(${main_wave.src})` }}>
           {/* Avatar */}
-          <div className="w-24 h-24 relative rounded-full overflow-hidden border border-neutral-700 mt-2">
+          <div className="hidden sm:block w-24 h-24 relative rounded-full overflow-hidden border border-neutral-700 mt-2">
             <Image src={avatar} fill alt="avatar"></Image>
           </div>
           {/* Name */}
-          <div className="pl-4 w-fit h-fit">
-            <h5 className="text-xl font-medium">Derek Alsop</h5>
-            <p className="text-xs text-neutral-400">@Azorant</p>
-            <span className="text-sm text-neutral-400">Full Stack Developer</span>
-            <div className="flex mt-2 space-x-3">
+          <div className="pl-0 sm:pl-4 w-full sm:w-fit h-fit flex flex-wrap sm:block">
+            <div className="block sm:hidden w-24 h-24 relative rounded-full overflow-hidden border border-neutral-700 mt-2">
+              <Image src={avatar} fill alt="avatar"></Image>
+            </div>
+            <div className="my-auto ml-4 sm:ml-0">
+              <h5 className="text-xl font-medium">Derek Alsop</h5>
+              <p className="text-xs text-neutral-400">@Azorant</p>
+              <span className="text-sm text-neutral-400">Full Stack Developer</span>
+            </div>
+
+            <div className="flex mt-2 mx-auto gap-2">
               {links.map((el) => (
                 <a href={el.link} key={el.link} target="_blank" className="p-2 rounded-lg bg-neutral-700  hover:bg-neutral-600 border border-neutral-600 flex">
                   <Icon icon={el.icon} className="text-xl my-auto" />
@@ -157,9 +163,9 @@ export default function Home() {
                 </div>
                 {/* Details */}
                 <div className="pl-4 flex flex-col">
-                  <p className="truncate max-w-[80%] sm:max-w-full">{song.title}</p>
-                  <p className="text-xs text-neutral-300 truncate max-w-[80%] sm:max-w-full">{song.album}</p>
-                  <p className="pt-2 text-sm truncate max-w-[80%] sm:max-w-full">{song.artist}</p>
+                  <p className="truncate max-w-[55%] sm:max-w-full">{song.title}</p>
+                  <p className="truncate max-w-[55%] sm:max-w-full text-xs text-neutral-300">{song.album}</p>
+                  <p className="truncate max-w-[55%] sm:max-w-full pt-2 text-sm ">{song.artist}</p>
                   <p className="mt-auto">
                     {Math.floor(song.songDuration / 60)}:{String(song.songDuration % 60).padStart(2, '0')}
                   </p>
@@ -169,33 +175,31 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-1 xl:overflow-auto flex flex-wrap gap-4 justify-around h-fit pb-4">
-          {projects.map((project) => (
-            <div className="flex flex-col border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4 mx-auto w-full max-w-lg xl:max-w-md min-h-80 h-80 bg-cover" style={{ backgroundImage: `url(${project.wave})` }} key={project.name}>
-              <p className="text-sm text-neutral-400">{project.tag}</p>
-              <h1 className="text-3xl mt-2">{project.name}</h1>
-              <p className="mt-4 text-neutral-300">{project.description}</p>
+        {projects.map((project) => (
+          <div className="flex flex-col border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4 w-full max-w-lg min-h-80 h-80 bg-cover" style={{ backgroundImage: `url(${project.wave})` }} key={project.name}>
+            <p className="text-sm text-neutral-400">{project.tag}</p>
+            <h1 className="text-3xl mt-2">{project.name}</h1>
+            <p className="mt-4 text-neutral-300">{project.description}</p>
 
-              <p className="mt-4">{project.featureText}</p>
-              <div className="flex flex-wrap gap-2">
-                {project.features.map((feature, index) => (
-                  <p key={index} className="text-sm text-neutral-400">
-                    {feature}
-                  </p>
-                ))}
-              </div>
-
-              <div className="flex flex-row-reverse mt-auto gap-2">
-                {project.links.map((link, index) => (
-                  <a href={link.link} key={index} target="_blank" className="p-2 rounded-lg bg-neutral-600/50 backdrop-blur  hover:bg-neutral-800 border border-neutral-500 flex">
-                    <Icon icon={link.icon} className="text-xl my-auto mr-2" />
-                    {link.text}
-                  </a>
-                ))}
-              </div>
+            <p className="mt-4">{project.featureText}</p>
+            <div className="flex flex-wrap gap-2">
+              {project.features.map((feature, index) => (
+                <p key={index} className="text-sm text-neutral-400">
+                  {feature}
+                </p>
+              ))}
             </div>
-          ))}
-        </div>
+
+            <div className="flex flex-row-reverse mt-auto gap-2">
+              {project.links.map((link, index) => (
+                <a href={link.link} key={index} target="_blank" className="p-2 rounded-lg bg-neutral-600/50 backdrop-blur  hover:bg-neutral-800 border border-neutral-500 flex">
+                  <Icon icon={link.icon} className="text-xl my-auto mr-2" />
+                  {link.text}
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
