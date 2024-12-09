@@ -8,8 +8,7 @@ import wave_one from '../../public/wave_one.svg';
 import wave_two from '../../public/wave_two.svg';
 import wave_three from '../../public/wave_three.svg';
 import wave_four from '../../public/wave_four.svg';
-import { useEffect, useState } from 'react';
-import { getSongInfo, SongInfo } from '@/app/info';
+import { usePresence } from '@/app/hook';
 
 const links = [
   { link: 'https://github.com/Azorant', icon: 'mdi:github' },
@@ -102,21 +101,16 @@ const projects = [
 ];
 
 export default function Home() {
-  const [song, setSong] = useState<SongInfo | null>(null);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await getSongInfo();
-      setSong(data);
-    };
-
-    const timer = setInterval(loadData, 5000);
-    loadData();
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
+  const presence = usePresence();
+  const spotify = presence?.activities.find((a) => a.type === 2);
+  const seconds = spotify ? Math.round((spotify.timestamps.end! - spotify.timestamps.start) / 1000) : 0;
+  const colors = {
+    online: 'bg-green-600',
+    idle: 'bg-yellow-300',
+    dnd: 'bg-red-600',
+    offline: 'bg-neutral-400'
+  }
+  
 
   return (
     <div className="h-screen w-screen text-white flex overflow-x-hidden">
@@ -124,13 +118,16 @@ export default function Home() {
         {/* Main Card */}
         <div className="flex flex-wrap border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4  w-full max-w-lg h-fit sm:min-h-80 sm:h-80 bg-cover" style={{ backgroundImage: `url(${main_wave.src})` }}>
           {/* Avatar */}
-          <div className="hidden sm:block w-24 h-24 relative rounded-full overflow-hidden border border-neutral-700 mt-2">
-            <Image src={avatar} fill alt="avatar"></Image>
+          <div className="hidden sm:block w-24 h-24 relative rounded-full border border-neutral-700 mt-2">
+            <Image src={avatar} fill alt="avatar" className="rounded-full overflow-hidden"></Image>
+            <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-neutral-800 border-4 ${colors[presence?.status as keyof typeof colors ?? 'offline']}`} />
           </div>
           {/* Name */}
           <div className="pl-0 sm:pl-4 w-full sm:w-fit h-fit flex flex-wrap sm:block">
-            <div className="block sm:hidden w-24 h-24 relative rounded-full overflow-hidden border border-neutral-700 mt-2">
-              <Image src={avatar} fill alt="avatar"></Image>
+            <div className="block sm:hidden w-24 h-24 relative rounded-full border border-neutral-700 mt-2">
+              <Image src={avatar} fill alt="avatar" className="rounded-full overflow-hidden"></Image>
+            <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-neutral-800 border-4 ${colors[presence?.status as keyof typeof colors ?? 'offline']}`} />
+
             </div>
             <div className="my-auto ml-4 sm:ml-0">
               <h5 className="text-xl font-medium">Derek Alsop</h5>
@@ -149,7 +146,7 @@ export default function Home() {
           {/* Music */}
           <div className="bg-neutral-700/30 mx-auto min-w-48 w-auto max-w-full border border-neutral-600 rounded-md shadow-md p-2 mt-4 backdrop-blur-md">
             <h6 className="text-sm text-neutral-200 pl-1 mb-2">Currently playing</h6>
-            {!song || song.isPaused ? (
+            {!spotify ? (
               <p className="pl-1">Nothing</p>
             ) : (
               <div className="flex w-fit h-fit">
@@ -157,17 +154,17 @@ export default function Home() {
                 <div
                   className="w-24 h-24 relative rounded-lg shadow-lg overflow-hidden border border-neutral-600 hover:cursor-pointer"
                   onClick={() => {
-                    window.open(song.url, '_blank', 'noreferrer')?.focus();
+                    window.open('https://api.statusbadges.me/openspotify/160168328520794112', '_blank', 'noreferrer')?.focus();
                   }}>
-                  <Image src={song.imageSrc} fill alt="avatar" />
+                  <Image src={`https://i.scdn.co/image/${spotify.assets!.large_image.replace('spotify:', '')}`} fill alt="avatar" />
                 </div>
                 {/* Details */}
                 <div className="pl-4 flex flex-col">
-                  <p className="truncate max-w-[55%] sm:max-w-full">{song.title}</p>
-                  <p className="truncate max-w-[55%] sm:max-w-full text-xs text-neutral-300">{song.album}</p>
-                  <p className="truncate max-w-[55%] sm:max-w-full pt-2 text-sm ">{song.artist}</p>
+                  <p className="truncate max-w-[55%] sm:max-w-full">{spotify.details}</p>
+                  <p className="truncate max-w-[55%] sm:max-w-full text-xs text-neutral-300">{spotify.assets!.large_text}</p>
+                  <p className="truncate max-w-[55%] sm:max-w-full pt-2 text-sm ">{spotify.state}</p>
                   <p className="mt-auto">
-                    {Math.floor(song.songDuration / 60)}:{String(song.songDuration % 60).padStart(2, '0')}
+                    {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}
                   </p>
                 </div>
               </div>
