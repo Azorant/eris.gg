@@ -12,7 +12,7 @@ import { usePresence } from '@/app/hook';
 
 const links = [
   { link: 'https://github.com/Azorant', icon: 'mdi:github' },
-  { link: 'https://discord.gg/ENchpszJYP', icon: 'ic:baseline-discord' },
+  { link: 'https://discord.gg/66dp9gxMZx', icon: 'ic:baseline-discord' },
   {
     link: 'https://twitter.com/Azorant',
     icon: 'pajamas:twitter',
@@ -69,20 +69,41 @@ const projects = [
     wave: wave_two.src,
   },
   {
-    name: 'Market Monitor',
-    description: 'A Discord bot that will alert you when your listings get undercut on the market in FFXIV.',
+    name: 'Liana',
+    description: 'Yet another all-in-one moderation bot.',
     tag: 'Project',
-    featureText: 'WIP',
-    features: ['Will be public soon™️'],
+    featureText: '',
+    features: [],
     links: [
       {
-        link: 'https://github.com/Azorant/MarketMonitor',
+        link: 'https://discord.com/api/oauth2/authorize?client_id=774711918823866449&scope=bot%20applications.commands',
+        icon: 'ic:baseline-discord',
+        text: 'Invite Liana',
+      },
+      {
+        link: 'https://github.com/Azorant/Liana',
         icon: 'mdi:github',
         text: 'Repo',
       },
     ],
     wave: wave_one.src,
   },
+  // Maybe when I get back into FFXIV
+  // {
+  //   name: 'Market Monitor',
+  //   description: 'A Discord bot that will alert you when your listings get undercut on the market in FFXIV.',
+  //   tag: 'Project',
+  //   featureText: 'WIP',
+  //   features: ['Will be public soon™️'],
+  //   links: [
+  //     {
+  //       link: 'https://github.com/Azorant/MarketMonitor',
+  //       icon: 'mdi:github',
+  //       text: 'Repo',
+  //     },
+  //   ],
+  //   wave: wave_one.src,
+  // },
   {
     name: 'Drawing API',
     description: 'Rest API that lets you create images out of shapes, text, and images via JSON.',
@@ -108,9 +129,8 @@ export default function Home() {
     online: 'bg-green-600',
     idle: 'bg-yellow-300',
     dnd: 'bg-red-600',
-    offline: 'bg-neutral-400'
-  }
-  
+    offline: 'bg-neutral-400',
+  };
 
   return (
     <div className="h-screen w-screen text-white flex overflow-x-hidden">
@@ -120,14 +140,13 @@ export default function Home() {
           {/* Avatar */}
           <div className="hidden sm:block w-24 h-24 relative rounded-full border border-neutral-700 mt-2">
             <Image src={avatar} fill alt="avatar" className="rounded-full overflow-hidden"></Image>
-            <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-neutral-800 border-4 ${colors[presence?.status as keyof typeof colors ?? 'offline']}`} />
+            <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-neutral-800 border-4 ${colors[(presence?.status as keyof typeof colors) ?? 'offline']}`} />
           </div>
           {/* Name */}
           <div className="pl-0 sm:pl-4 w-full sm:w-fit h-fit flex flex-wrap sm:block">
             <div className="block sm:hidden w-24 h-24 relative rounded-full border border-neutral-700 mt-2">
               <Image src={avatar} fill alt="avatar" className="rounded-full overflow-hidden"></Image>
-            <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-neutral-800 border-4 ${colors[presence?.status as keyof typeof colors ?? 'offline']}`} />
-
+              <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-neutral-800 border-4 ${colors[(presence?.status as keyof typeof colors) ?? 'offline']}`} />
             </div>
             <div className="my-auto ml-4 sm:ml-0">
               <h5 className="text-xl font-medium">Derek Alsop</h5>
