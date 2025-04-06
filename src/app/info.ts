@@ -21,7 +21,7 @@ export interface Presence {
   activities: Activity[];
 }
 
-interface Activity {
+export interface Activity {
   type: number;
   timestamps: Timestamps;
   name: string;
@@ -38,7 +38,8 @@ interface Activity {
 }
 
 interface Party {
-  id: string;
+  id?: string;
+  size: [number, number]
 }
 
 interface Assets {
@@ -49,7 +50,7 @@ interface Assets {
 }
 
 interface Timestamps {
-  start: number;
+  start?: number;
   end?: number;
 }
 

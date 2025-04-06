@@ -9,6 +9,7 @@ import wave_two from '../../public/wave_two.svg';
 import wave_three from '../../public/wave_three.svg';
 import wave_four from '../../public/wave_four.svg';
 import { usePresence } from '@/app/hook';
+import { ActivityCard } from '@/components/ActivityCard';
 
 const links = [
   { link: 'https://github.com/Azorant', icon: 'mdi:github' },
@@ -69,6 +70,26 @@ const projects = [
     wave: wave_two.src,
   },
   {
+    name: 'Market Monitor',
+    description: 'An easy-to-use bot that notifies you of undercutting in the markets of Eorzea\nand tracks your sale and purchase history.',
+    tag: 'Project',
+    featureText: 'Features',
+    features: ['Undercut notifications', 'Character purchase history'],
+    links: [
+      {
+        link: 'https://discord.com/api/oauth2/authorize?client_id=502696300412928021&scope=bot%20applications.commands',
+        icon: 'ic:baseline-discord',
+        text: 'Invite Market Monitor',
+      },
+      {
+        link: 'https://github.com/Azorant/MarketMonitor',
+        icon: 'mdi:github',
+        text: 'Repo',
+      },
+    ],
+    wave: wave_three.src,
+  },
+  {
     name: 'Liana',
     description: 'Yet another all-in-one moderation bot.',
     tag: 'Project',
@@ -88,22 +109,6 @@ const projects = [
     ],
     wave: wave_one.src,
   },
-  // Maybe when I get back into FFXIV
-  // {
-  //   name: 'Market Monitor',
-  //   description: 'A Discord bot that will alert you when your listings get undercut on the market in FFXIV.',
-  //   tag: 'Project',
-  //   featureText: 'WIP',
-  //   features: ['Will be public soon™️'],
-  //   links: [
-  //     {
-  //       link: 'https://github.com/Azorant/MarketMonitor',
-  //       icon: 'mdi:github',
-  //       text: 'Repo',
-  //     },
-  //   ],
-  //   wave: wave_one.src,
-  // },
   {
     name: 'Drawing API',
     description: 'Rest API that lets you create images out of shapes, text, and images via JSON.',
@@ -122,9 +127,9 @@ const projects = [
 ];
 
 export default function Home() {
-  const presence = usePresence();
+  const [presence, refetchPresence] = usePresence();
   const spotify = presence?.activities.find((a) => a.type === 2);
-  const seconds = spotify ? Math.round((spotify.timestamps.end! - spotify.timestamps.start) / 1000) : 0;
+  const game = presence?.activities.find((a) => a.type === 0);
   const colors = {
     online: 'bg-green-600',
     idle: 'bg-yellow-300',
@@ -136,7 +141,7 @@ export default function Home() {
     <div className="h-screen w-screen text-white flex overflow-x-hidden">
       <div className="w-auto max-w-[95dvw] xl:max-w-[80dvw] flex flex-row gap-4 p-6 pb-24 xl:pb-4 flex-wrap min-h-screen h-fit place-content-center mx-auto">
         {/* Main Card */}
-        <div className="flex flex-wrap border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4  w-full max-w-lg h-fit sm:min-h-80 sm:h-80 bg-cover" style={{ backgroundImage: `url(${main_wave.src})` }}>
+        <div className="flex flex-wrap border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4  w-full max-w-2xl sm:min-h-80 sm:h-80 lg:h-fit bg-cover" style={{ backgroundImage: `url(${main_wave.src})` }}>
           {/* Avatar */}
           <div className="hidden sm:block w-24 h-24 relative rounded-full border border-neutral-700 mt-2">
             <Image src={avatar} fill alt="avatar" className="rounded-full overflow-hidden"></Image>
@@ -162,37 +167,23 @@ export default function Home() {
               ))}
             </div>
           </div>
-          {/* Music */}
-          <div className="bg-neutral-700/30 mx-auto min-w-48 w-auto max-w-full border border-neutral-600 rounded-md shadow-md p-2 mt-4 backdrop-blur-md">
-            <h6 className="text-sm text-neutral-200 pl-1 mb-2">Currently playing</h6>
-            {!spotify ? (
-              <p className="pl-1">Nothing</p>
-            ) : (
-              <div className="flex w-fit h-fit">
-                {/* Cover */}
-                <div
-                  className="w-24 h-24 relative rounded-lg shadow-lg overflow-hidden border border-neutral-600 hover:cursor-pointer"
-                  onClick={() => {
-                    window.open('https://api.statusbadges.me/openspotify/160168328520794112', '_blank', 'noreferrer')?.focus();
-                  }}>
-                  <Image src={`https://i.scdn.co/image/${spotify.assets!.large_image.replace('spotify:', '')}`} fill alt="avatar" />
-                </div>
-                {/* Details */}
-                <div className="pl-4 flex flex-col">
-                  <p className="truncate max-w-[55%] sm:max-w-full">{spotify.details}</p>
-                  <p className="truncate max-w-[55%] sm:max-w-full text-xs text-neutral-300">{spotify.assets!.large_text}</p>
-                  <p className="truncate max-w-[55%] sm:max-w-full pt-2 text-sm ">{spotify.state}</p>
-                  <p className="mt-auto">
-                    {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}
-                  </p>
-                </div>
-              </div>
-            )}
+          <div className='flex gap-2 flex-wrap mx-auto'>
+
+          {!!game ? <ActivityCard activity={game} /> : null}
+          {!!spotify ? (
+            <ActivityCard
+            activity={spotify}
+            onClick={() => {
+              window.open('https://api.statusbadges.me/openspotify/160168328520794112', '_blank', 'noreferrer')?.focus();
+                }}
+                refetch={refetchPresence}
+            />
+          ) : null}
           </div>
         </div>
 
         {projects.map((project) => (
-          <div className="flex flex-col border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4 w-full max-w-lg min-h-80 h-80 bg-cover" style={{ backgroundImage: `url(${project.wave})` }} key={project.name}>
+          <div className="flex flex-col border rounded-md shadow-md bg-neutral-800 border-neutral-700 p-4 w-full max-w-2xl 2xl:max-w-lg min-h-80 h-80 bg-cover" style={{ backgroundImage: `url(${project.wave})` }} key={project.name}>
             <p className="text-sm text-neutral-400">{project.tag}</p>
             <h1 className="text-3xl mt-2">{project.name}</h1>
             <p className="mt-4 text-neutral-300">{project.description}</p>
